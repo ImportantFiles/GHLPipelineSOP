@@ -2,412 +2,241 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pipeline SOP</title>
+<title>GHL Pipelines SOP</title>
 
 <style>
-:root {
-    --bg: #f5f5f5;
-    --card: #ffffff;
-    --text: #222;
-}
-
-body.dark {
-    --bg: #121212;
-    --card: #1e1e1e;
-    --text: #eee;
-}
-
 body {
     margin: 0;
-    font-family: Arial;
-    background: var(--bg);
-    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+    color: #000;
 }
 
-.header {
+/* HEADER */
+header {
     display: flex;
-    gap: 10px;
-    padding: 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
 }
 
-input {
-    padding: 10px;
+.search-bar {
+    padding: 10px 15px;
+    width: 260px;
+    border: 1px solid #000;
     border-radius: 8px;
-    border: none;
-    width: 250px;
 }
 
-.toggle {
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
-    background: var(--card);
+.logo {
+    height: 50px;
 }
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    padding: 0 15px;
+/* TITLE */
+h1 {
+    text-align: center;
+    font-weight: 300;
+    letter-spacing: 2px;
 }
 
-.tab {
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 8px;
-    background: var(--card);
-}
-
-.tab.active {
-    font-weight: bold;
-}
-
+/* LAYOUT */
 .container {
+    display: flex;
+    gap: 20px;
+    padding: 20px 40px;
+}
+
+.column {
+    flex: 1;
+    background: #f9f9f9;
     padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
-    gap: 15px;
+.column h2 {
+    text-align: center;
 }
 
+/* BUTTONS */
 .btn {
+    width: 100%;
     padding: 12px;
+    margin: 6px 0;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
     border-radius: 10px;
-    background: var(--card);
     cursor: pointer;
-    border: none;
-    text-align: left;
+    transition: all 0.25s ease;
 }
 
 .btn:hover {
-    opacity: 0.8;
+    background: #fff;
+    color: #000;
 }
 
+/* MODAL */
 .modal {
     display: none;
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    top: 0;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
 }
 
-.modal-box {
-    background: var(--card);
+.modal-content {
+    background: #fff;
     margin: 5% auto;
-    padding: 20px;
-    width: 60%;
-    border-radius: 12px;
+    padding: 25px;
+    width: 55%;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close {
     float: right;
+    font-size: 24px;
     cursor: pointer;
 }
+
+ul { padding-left: 20px; }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <input id="search" placeholder="Search..." onkeyup="render()">
-    <div class="toggle" onclick="toggleDark()">🌙</div>
-</div>
+<header>
+<input type="text" class="search-bar" placeholder="Search SOP...">
+<img src="logo.png" class="logo">
+</header>
 
-<div class="tabs">
-    <div class="tab active" onclick="setTab('onboarding')">Onboarding</div>
-    <div class="tab" onclick="setTab('active')">Active</div>
-    <div class="tab" onclick="setTab('refunds')">Refunds</div>
-</div>
+<h1>GHL Pipelines SOP</h1>
 
 <div class="container">
-    <div id="grid" class="grid"></div>
+
+<!-- ONBOARDING -->
+<div class="column">
+<h2>Onboarding Pipeline</h2>
+<button class="btn" onclick="openModal('hold')">Hold – Deposit Only</button>
+<button class="btn" onclick="openModal('kickoff')">Kickoff Call</button>
+<button class="btn" onclick="openModal('booked')">Booked for Onboarding</button>
+<button class="btn" onclick="openModal('kyc')">Waiting for KYC/KYB Approval</button>
+<button class="btn" onclick="openModal('funding')">Waiting to Go Live (Funding Pending)</button>
+<button class="btn" onclick="openModal('live')">Live & Connected</button>
+<button class="btn" onclick="openModal('pause')">On Pause (Client Request)</button>
+<button class="btn" onclick="openModal('nr')">Non-Responsive</button>
+<button class="btn" onclick="openModal('refund1')">Refund Requested</button>
 </div>
 
+<!-- ACTIVE -->
+<div class="column">
+<h2>Active Pipeline</h2>
+<button class="btn" onclick="openModal('live30')">Live (&lt;30 Days)</button>
+<button class="btn" onclick="openModal('d30')">30 Days: Educate & AR</button>
+<button class="btn" onclick="openModal('d60')">60 Days: Educate & AR</button>
+<button class="btn" onclick="openModal('d90')">90 Days</button>
+<button class="btn" onclick="openModal('d120')">120 Days</button>
+<button class="btn" onclick="openModal('active120')">Active Clients (&gt;120 Days)</button>
+<button class="btn" onclick="openModal('refund2')">Refund Requested</button>
+</div>
+
+<!-- REFUNDS -->
+<div class="column">
+<h2>Refunds Pipeline</h2>
+<button class="btn" onclick="openModal('r1')">Refund Requested</button>
+<button class="btn" onclick="openModal('r2')">Review in Progress</button>
+<button class="btn" onclick="openModal('r3')">Denied</button>
+<button class="btn" onclick="openModal('r4')">Pass to Sales</button>
+<button class="btn" onclick="openModal('r5')">Booked with Adam</button>
+<button class="btn" onclick="openModal('r6')">Booked with Luc</button>
+<button class="btn" onclick="openModal('r7')">Saved – Action Required</button>
+<button class="btn" onclick="openModal('r8')">Saved – No Action Required</button>
+<button class="btn" onclick="openModal('r9')">Completed</button>
+<button class="btn" onclick="openModal('r10')">Chargeback</button>
+</div>
+
+</div>
+
+<!-- MODAL -->
 <div id="modal" class="modal">
-  <div class="modal-box">
-    <span class="close" onclick="closeModal()">✖</span>
-    <div id="content"></div>
-  </div>
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<div id="modalText"></div>
+</div>
 </div>
 
 <script>
 
-// ================== ADMIN EDIT AREA ==================
-const DATA = {
+const data = {
 
-active: {
-"Live (<30 Days>)": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
+// ONBOARDING
+hold:`<ul><li><b>Responsible:</b> Sales</li><li><b>Overview:</b> Clients who have made a partial payment but have not yet completed the full required funding. Onboarding is temporarily on hold at this stage.</li><li><b>Key Notes:</b><ul><li>Full onboarding cannot proceed until payment is completed</li><li>In select cases, Sales may request early onboarding with a deposit only</li><li>Early onboarding requires internal approval</li></ul></li><li><b>Action Required:</b><ul><li>Follow up with client for remaining balance</li><li>Submit approval request if early onboarding is needed</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Client has completed onboarding and the account has started trading</li>
-<li>Account age is less than 30 days</li>
-</ul>
+kickoff:`<ul><li><b>Responsible:</b> Sales</li><li><b>Overview:</b> Initial engagement call where the deal is finalized, and client expectations are clearly established prior to onboarding.</li><li><b>Key Notes:</b><ul><li>Confirms client commitment and readiness</li><li>Reviews product/service scope, timelines, and next steps</li><li>Aligns expectations on performance, risks, and onboarding process</li></ul></li><li><b>Action Required:</b><ul><li>Conduct call and confirm agreement</li><li>Ensure client understands onboarding requirements</li><li>Transition client to Account Management</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Focus on monitoring early performance and stability</li>
-<li>Ensure client is properly guided during initial trading phase</li>
-</ul>
+booked:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> Client has signed the contract and is officially scheduled for onboarding with the Account Manager.</li><li><b>Key Notes:</b><ul><li>Automated introduction email is triggered upon booking</li><li>Marks formal handoff from Sales to Account Management</li></ul></li><li><b>Action Required:</b><ul><li>Prepare onboarding materials</li><li>Confirm scheduled meeting</li><li>Initiate client relationship and onboarding guidance</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Maintain regular communication with client</li>
-<li>Monitor account activity and flag any concerns</li>
-<li>Add relevant updates and notes in GHL</li>
-</ul>
-`,
+kyc:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> Client is undergoing brokerage account setup, including identity verification (KYC/KYB).</li><li><b>Key Notes:</b><ul><li>Includes account registration and document submission</li><li>Timeline depends on broker processing speed</li><li>Delays may occur due to incomplete or incorrect documentation</li></ul></li><li><b>Action Required:</b><ul><li>Assist client with submission requirements</li><li>Monitor verification progress</li><li>Follow up with broker if needed</li></ul></li></ul>`,
 
-"30 Days: Educate & AR": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
+funding:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> All systems and accounts are set up, but trading has not yet started due to pending fund transfer.</li><li><b>Key Notes:</b><ul><li>Funding timelines vary based on broker and payment method</li><li>No trading activity until funds are fully received and allocated</li></ul></li><li><b>Action Required:</b><ul><li>Confirm funding instructions with client</li><li>Track transfer status</li><li>Coordinate with broker for confirmation</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Client has been trading for 30 days</li>
-<li>First performance review checkpoint</li>
-</ul>
+live:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> The client account is fully operational, funded, and actively trading.</li><li><b>Key Notes:</b><ul><li>System is live and executing trades</li><li>Client is now in active account management phase</li></ul></li><li><b>Action Required:</b><ul><li>Monitor account performance</li><li>Provide regular updates and support</li><li>Ensure client satisfaction and retention</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Review account performance and initial results</li>
-<li>Set proper expectations with the client</li>
-<li>PENDING: If automated email or AM to trigger the email</li>
-</ul>
+pause:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> Onboarding or trading activity is temporarily paused at the client’s request.</li><li><b>Common Reasons:</b><ul><li>Pending funds availability</li><li>IRA or compliance processing</li><li>Personal or financial readiness</li></ul></li><li><b>Action Required:</b><ul><li>Document reason for pause</li><li>Maintain periodic follow-ups</li><li>Resume onboarding once client is ready</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Conduct 30-day review with client</li>
-<li>Discuss performance insights and expectations</li>
-<li>Send review email (manual or automated TBD)</li>
-<li>Update notes in GHL</li>
-</ul>
-`,
+nr:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> Client has not responded after multiple outreach attempts.</li><li><b>Criteria:</b><ul><li>Minimum of three consecutive follow-ups with no response</li><li>Occurs after initial onboarding scheduling</li></ul></li><li><b>Action Required:</b><ul><li>Log all outreach attempts</li><li>Send final follow-up notice</li><li>Escalate or reassign if necessary</li></ul></li></ul>`,
 
-"60 Days: Educate & AR (Comparison)": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
+refund1:`<ul><li><b>Responsible:</b> Account Manager</li><li><b>Overview:</b> The client has formally requested a refund.</li><li><b>Key Notes:</b><ul><li>De-escalation efforts must be attempted prior to processing</li><li>If client confirms intent, case proceeds to refund stage</li></ul></li><li><b>Action Required:</b><ul><li>Move deal to this stage</li><li>Submit refund request using required template</li><li>Send details to #cast-endorsement (Slack)</li><li>Update all relevant notes in GHL</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Client has been trading for 60 days</li>
-<li>Performance comparison checkpoint</li>
-</ul>
+// ACTIVE
+live30:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has completed onboarding and the account has started trading Account age is less than 30 days</li><li><b>Key Notes:</b><ul><li>Focus on monitoring early performance and stability</li><li>Ensure client is properly guided during initial trading phase</li></ul></li><li><b>Action Required:</b><ul><li>Maintain regular communication with client</li><li>Monitor account activity and flag any concerns</li><li>Add relevant updates and notes in GHL</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Compare 30-day vs 60-day performance</li>
-<li>Highlight improvements, consistency, or concerns</li>
-<li>PENDING: If automated email or AM to trigger the email</li>
-</ul>
+d30:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has been trading for 30 days First performance review checkpoint</li><li><b>Key Notes:</b><ul><li>Review account performance and initial results</li><li>Set proper expectations with the client</li><li>PENDING: Confirm if email is automated or manually triggered by AM</li></ul></li><li><b>Action Required:</b><ul><li>Conduct 30-day review with client</li><li>Discuss performance insights and expectations</li><li>Send review email (manual or automated TBD)</li><li>Update notes in GHL</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Conduct comparison review with client</li>
-<li>Present insights between 30-day and 60-day data</li>
-<li>Send review email (manual or automated TBD)</li>
-<li>Update notes in GHL</li>
-</ul>
-`,
+d60:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has been trading for 60 days Performance comparison checkpoint</li><li><b>Key Notes:</b><ul><li>Compare 30-day vs 60-day performance</li><li>Highlight improvements, consistency, or concerns</li><li>PENDING: Confirm if email is automated or manually triggered by AM</li></ul></li><li><b>Action Required:</b><ul><li>Conduct comparison review with client</li><li>Present insights between 30-day and 60-day data</li><li>Send review email (manual or automated TBD)</li><li>Update notes in GHL</li></ul></li></ul>`,
 
-"90 Days: Overall Performance Discussion": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
+d90:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has been trading for 90 days Full performance evaluation stage</li><li><b>Key Notes:</b><ul><li>Review overall system performance (highs and lows)</li><li>Provide a realistic performance outlook</li><li>PENDING: Confirm if email is automated or manually triggered by AM</li></ul></li><li><b>Action Required:</b><ul><li>Conduct 90-day performance discussion</li><li>Align expectations based on full-cycle performance</li><li>Send review email (manual or automated TBD)</li><li>Update notes in GHL</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Client has been trading for 90 days</li>
-<li>Full performance evaluation stage</li>
-</ul>
+d120:`<ul><li><b>Responsible:</b> Kayla / Sales</li><li><b>Overview:</b> Client has reached 120 days of trading Evaluation for expansion opportunities</li><li><b>Key Notes:</b><ul><li>Identify opportunities for diversification</li><li>Assess readiness for upsell</li></ul></li><li><b>Action Required:</b><ul><li>Review account for upsell potential</li><li>Coordinate with Sales if an opportunity is identified</li><li>Document findings and actions in GHL</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Review overall system performance (highs and lows)</li>
-<li>Provide a realistic performance outlook</li>
-<li>PENDING: If automated email or AM to trigger the email</li>
-</ul>
+active120:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Clients trading for more than 120 days Long-term account management stage</li><li><b>Key Notes:</b><ul><li>Focus on retention and relationship management</li><li>Continuous monitoring and engagement</li></ul></li><li><b>Action Required:</b><ul><li>Maintain ongoing communication</li><li>Monitor performance and client satisfaction</li><li>Update notes and engagement history in GHL</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Conduct 90-day performance discussion</li>
-<li>Align expectations based on full-cycle performance</li>
-<li>Send review email (manual or automated TBD)</li>
-<li>Update notes in GHL</li>
-</ul>
-`,
+refund2:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> The client has formally requested a refund</li><li><b>Key Notes:</b><ul><li>De-escalation efforts must be attempted prior to processing</li><li>If client confirms intent, case proceeds to refund stage</li></ul></li><li><b>Action Required:</b><ul><li>Move deal to this stage</li><li>Submit refund request using required template</li><li>Send details to #cast-endorsement (Slack)</li><li>Update all relevant notes in GHL</li></ul></li></ul>`,
 
-"120 Days Review (Diversify & Upsell)": `
-<b>Responsible:</b> Kayla / Sales<br><br>
+// REFUNDS
+r1:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> The client has formally requested a refund</li><li><b>Key Notes:</b><ul><li>De-escalation efforts must be attempted prior to processing</li><li>If client confirms intent, case proceeds to refund stage</li></ul></li><li><b>Action Required:</b><ul><li>Move deal to this stage</li><li>Submit refund request using required template</li><li>Send details to #cast-endorsement (Slack)</li><li>Update all relevant notes in GHL</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Client has reached 120 days of trading</li>
-<li>Evaluation for expansion opportunities</li>
-</ul>
+r2:`<ul><li><b>Responsible:</b> Refunds Team</li><li><b>Overview:</b> Refund request has been received and is under review</li><li><b>Key Notes:</b><ul><li>Review includes account performance, settings, contract, and eligibility</li><li>Kayla/Jhezel to determine and confirm next steps for the client</li></ul></li><li><b>Action Required:</b><ul><li>Conduct full account review</li><li>Assess eligibility based on contract and performance</li><li>Align internally on next steps</li><li>Update findings and notes in GHL</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Identify opportunities for diversification</li>
-<li>Assess readiness for upsell</li>
-</ul>
+r3:`<ul><li><b>Responsible:</b> Refunds Team</li><li><b>Overview:</b> Client has been determined not eligible for a refund after review</li><li><b>Key Notes:</b><ul><li>Decision must be based on contract and account evaluation</li><li>Clear explanation and support must be provided to the client</li></ul></li><li><b>Action Required:</b><ul><li>Send email to client explaining review outcome</li><li>Provide alternative options or assistance</li><li>Document communication and outcome in GHL</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Review account for upsell potential</li>
-<li>Coordinate with Sales if opportunity is identified</li>
-<li>Document findings and actions in GHL</li>
-</ul>
-`,
+r4:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Case is redirected to Sales instead of continuing refund process</li><li><b>Key Notes:</b><ul><li>Common for clients not yet onboarded</li><li>Typically involves claims of being misinformed during sales process</li><li>Kayla/Jhezel to confirm decision</li></ul></li><li><b>Action Required:</b><ul><li>Coordinate with Sales team for reassessment</li><li>Transfer relevant details and context</li><li>Update notes and status in GHL</li></ul></li></ul>`,
 
-"Active Clients (>120 Days)": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
+r5:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has been endorsed to Adam for further assistance</li><li><b>Key Notes:</b><ul><li>Used for escalation or deeper client handling</li></ul></li><li><b>Action Required:</b><ul><li>Schedule and confirm booking with Adam</li><li>Ensure client attendance and preparation</li><li>Log updates and outcomes in GHL</li></ul></li></ul>`,
 
-<b>Overview:</b>
-<ul>
-<li>Clients trading for more than 120 days</li>
-</ul>
+r6:`<ul><li><b>Responsible:</b> Account Manager (AM)</li><li><b>Overview:</b> Client has been endorsed to Luc for further assistance</li><li><b>Key Notes:</b><ul><li>Used for escalation or specialized handling</li></ul></li><li><b>Action Required:</b><ul><li>Schedule and confirm booking with Luc</li><li>Ensure client attendance and preparation</li><li>Log updates and outcomes in GHL</li></ul></li></ul>`,
 
-<b>Key Notes:</b>
-<ul>
-<li>Focus on retention and relationship management</li>
-<li>Continuous monitoring and engagement</li>
-</ul>
+r7:`<ul><li><b>Responsible:</b> Refunds Team</li><li><b>Overview:</b> Client agreed to stay after being offered a retention option</li><li><b>Key Notes:</b><ul><li>Offers may include switching software or discounted/free additions</li><li>AM must execute the agreed next steps</li></ul></li><li><b>Action Required:</b><ul><li>Refunds Team to inform AM of agreed arrangement</li><li>AM to implement changes (software switch, add-ons, etc.)</li><li>Confirm setup with client</li><li>Update all notes in GHL</li></ul></li></ul>`,
 
-<b>Action Required:</b>
-<ul>
-<li>Maintain ongoing communication</li>
-<li>Monitor performance and client satisfaction</li>
-<li>Update notes and engagement history in GHL</li>
-</ul>
-`
-},
+r8:`<ul><li><b>Responsible:</b> Refunds Team</li><li><b>Overview:</b> Client decided not to proceed with refund and continue trading</li><li><b>Key Notes:</b><ul><li>No further changes required on the account</li></ul></li><li><b>Action Required:</b><ul><li>Confirm client decision</li><li>Ensure account continues running smoothly</li><li>Update notes in GHL</li></ul></li></ul>`,
 
-refunds: {
+r9:`<ul><li><b>Responsible:</b> Accounting</li><li><b>Overview:</b> Refund has been successfully processed and completed</li><li><b>Key Notes:</b><ul><li>Funds have been transferred to the client</li></ul></li><li><b>Action Required:</b><ul><li>Confirm successful transaction</li><li>Notify relevant teams if needed</li><li>Update final notes and status in GHL</li></ul></li></ul>`,
 
-"Refund Requested": `
-<b>Responsible:</b> Account Manager (AM)<br><br>
-
-<b>Overview:</b>
-<ul>
-<li>The client has formally requested a refund</li>
-</ul>
-
-<b>Key Notes:</b>
-<ul>
-<li>De-escalation efforts must be attempted prior to processing</li>
-<li>If client confirms intent, case proceeds to refund stage</li>
-</ul>
-
-<b>Action Required:</b>
-<ul>
-<li>Move deal to this stage</li>
-<li>Submit refund request using required template</li>
-<li>Send details to #cast-endorsement (Slack)</li>
-<li>Update all relevant notes in GHL</li>
-</ul>
-`,
-
-"Refund – Review in Progress": `
-<ul>
-<li>Refunds Team reviews account (performance, settings, contract, eligibility)</li>
-<li>Kayla/Jhezel confirm next steps</li>
-</ul>
-`,
-
-"Refund – Denied/Not Eligible": `
-<ul>
-<li>Refunds Team sends email explaining decision</li>
-<li>Provide options and assistance</li>
-</ul>
-`,
-
-"Refund – Pass to Sales": `
-<ul>
-<li>AM coordinates with Sales</li>
-<li>For misinformed / not onboarded clients</li>
-</ul>
-`,
-
-"Refund – Booked with Adam": `
-<ul><li>Client endorsed to Adam</li></ul>
-`,
-
-"Refund – Booked with Luc": `
-<ul><li>Client endorsed to Luc</li></ul>
-`,
-
-"Refund Saved – Action Required": `
-<ul>
-<li>Client saved via offer</li>
-<li>AM executes next steps</li>
-</ul>
-`,
-
-"Refund Saved – No Action Required": `
-<ul>
-<li>Client continues trading</li>
-</ul>
-`,
-
-"Refund – Completed": `
-<ul>
-<li>Refund processed successfully</li>
-</ul>
-`,
-
-"Refund – Chargeback": `
-<ul>
-<li>Client filed chargeback</li>
-</ul>
-`
-},
-
-onboarding: {
-"Coming Soon": "<ul><li>Add your onboarding SOP here</li></ul>"
-}
+r10:`<ul><li><b>Responsible:</b> Accounting</li><li><b>Overview:</b> Client has initiated a chargeback</li><li><b>Key Notes:</b><ul><li>May occur before or after contacting support</li><li>Requires immediate internal attention</li></ul></li><li><b>Action Required:</b><ul><li>Record chargeback details</li><li>Coordinate with relevant teams for resolution</li><li>Update all notes and documentation in GHL</li></ul></li></ul>`
 
 };
-// ================== END ADMIN ==================
 
-let currentTab = "onboarding";
-
-function setTab(tab) {
-    currentTab = tab;
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-    event.target.classList.add("active");
-    render();
+function openModal(k){
+document.getElementById("modal").style.display="block";
+document.getElementById("modalText").innerHTML=data[k];
 }
 
-function render() {
-    let grid = document.getElementById("grid");
-    let search = document.getElementById("search").value.toLowerCase();
-    grid.innerHTML = "";
-
-    Object.entries(DATA[currentTab]).forEach(([title, content])=>{
-        if (!title.toLowerCase().includes(search)) return;
-
-        let btn = document.createElement("button");
-        btn.className = "btn";
-        btn.innerHTML = "📄 " + title;
-        btn.onclick = ()=>openModal(title, content);
-        grid.appendChild(btn);
-    });
+function closeModal(){
+document.getElementById("modal").style.display="none";
 }
-
-function openModal(title, content) {
-    document.getElementById("modal").style.display = "block";
-    document.getElementById("content").innerHTML = `<h2>${title}</h2>` + content;
-}
-
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
-}
-
-function toggleDark() {
-    document.body.classList.toggle("dark");
-}
-
-render();
 
 </script>
 
