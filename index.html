@@ -1,138 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pipeline Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Pipeline SOP Dashboard</title>
 
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      margin: 0;
-      background: #f4f6f9;
-      color: #333;
-    }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #fff;
+    margin: 0;
+    padding: 30px;
+}
 
-    header {
-      text-align: center;
-      padding: 20px;
-      background: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      font-size: 24px;
-      font-weight: 600;
-    }
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      padding: 30px;
-    }
+/* GRID */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
 
-    .column {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
+/* COLUMN */
+.column {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 500px;
+}
 
-    .column h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
-    }
+.column h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #f1f3f7;
-      cursor: pointer;
-      text-align: left;
-      transition: 0.2s ease;
-      font-size: 14px;
-    }
+/* BUTTON */
+.btn {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    .btn:hover {
-      background: #e0e7ff;
-      transform: translateX(4px);
-    }
+.btn:hover {
+    background: #3b82f6;
+}
 
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background: #1e293b;
+    margin: 5% auto;
+    padding: 25px;
+    width: 60%;
+    border-radius: 12px;
+}
+
+.close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<header>Pipeline Dashboard</header>
+<h1>Pipeline SOP Dashboard</h1>
 
 <div class="container">
 
-  <!-- ACTIVE -->
-  <div class="column">
-    <h2>Active</h2>
+    <!-- ONBOARDING -->
+    <div class="column">
+        <h2>Onboarding</h2>
 
-    <button class="btn" onclick="openLink('https://example.com/live')">Live</button>
-    <button class="btn" onclick="openLink('https://example.com/30day')">30-Day Review</button>
-    <button class="btn" onclick="openLink('https://example.com/90day')">90-Day Review</button>
-    <button class="btn" onclick="openLink('https://example.com/120day')">120-Day Review</button>
-    <button class="btn" onclick="openLink('https://example.com/active-client')">Active Client</button>
-    <button class="btn" onclick="openLink('https://example.com/refund-requested')">Refund Requested</button>
-    <button class="btn" onclick="openLink('https://example.com/dnd')">DND by Management</button>
+        <button class="btn" onclick="openModal('hold')">Hold – Deposit Only</button>
+        <button class="btn" onclick="openModal('kickoff')">Kickoff Call</button>
+        <button class="btn" onclick="openModal('booked')">Booked for Onboarding</button>
+        <button class="btn" onclick="openModal('kyc')">Waiting for KYC/KYB Approval</button>
+        <button class="btn" onclick="openModal('funding')">Waiting to Go Live (Funding Pending)</button>
+        <button class="btn" onclick="openModal('live')">Live & Connected</button>
+        <button class="btn" onclick="openModal('pause')">On Pause (Client Request)</button>
+        <button class="btn" onclick="openModal('nonresponsive')">Non-Responsive</button>
+    </div>
 
-  </div>
+    <!-- ACTIVE -->
+    <div class="column">
+        <h2>Active</h2>
 
-  <!-- ONBOARDING -->
-  <div class="column">
-    <h2>Onboarding</h2>
+        <button class="btn" onclick="openModal('<30days')">Live</button>
+    </div>
 
-    <button class="btn" onclick="openLink('https://example.com/hold')">Hold – Deposit Only</button>
-    <button class="btn" onclick="openLink('https://example.com/kickoff')">Kickoff Call</button>
-    <button class="btn" onclick="openLink('https://example.com/kyc')">Independent KYC/KYB</button>
-    <button class="btn" onclick="openLink('https://example.com/kyc-approval')">Waiting for KYC/KYB Approval</button>
-    <button class="btn" onclick="openLink('https://example.com/funding')">Waiting for Funding</button>
-    <button class="btn" onclick="openLink('https://example.com/connect')">Waiting To Go Live & Connect</button>
-    <button class="btn" onclick="openLink('https://example.com/live-connected')">Live & Connected</button>
-    <button class="btn" onclick="openLink('https://example.com/non-responsive')">Non-Responsive / Not Ready</button>
-    <button class="btn" onclick="openLink('https://example.com/onboarding-refund')">Refund Requested</button>
-    <button class="btn" onclick="openLink('https://example.com/not-client')">Not a Client (Jhezel to Review)</button>
+    <!-- REFUND -->
+    <div class="column">
+        <h2>Refund</h2>
 
-  </div>
-
-  <!-- REFUND -->
-  <div class="column">
-    <h2>Refund</h2>
-
-    <button class="btn" onclick="openLink('https://example.com/refund-requested')">Refund – Requested</button>
-    <button class="btn" onclick="openLink('https://example.com/review')">Refund – Review in Progress</button>
-    <button class="btn" onclick="openLink('https://example.com/sales')">Refund – Passed to Sales</button>
-    <button class="btn" onclick="openLink('https://example.com/founder')">Refund – Booked with Founder</button>
-    <button class="btn" onclick="openLink('https://example.com/action-required')">Refund Saved – Action Required</button>
-    <button class="btn" onclick="openLink('https://example.com/denied')">Refund – Denied</button>
-    <button class="btn" onclick="openLink('https://example.com/full')">Refund – Approved (Full)</button>
-    <button class="btn" onclick="openLink('https://example.com/partial')">Refund – Approved (Partial)</button>
-    <button class="btn" onclick="openLink('https://example.com/sent')">Refunded – Sent</button>
-    <button class="btn" onclick="openLink('https://example.com/deposit')">Refunded – Deposit Only</button>
-    <button class="btn" onclick="openLink('https://example.com/chargeback')">Chargeback</button>
-    <button class="btn" onclick="openLink('https://example.com/dispute-won')">Dispute – Won</button>
-    <button class="btn" onclick="openLink('https://example.com/dispute-lost')">Dispute – Lost</button>
-    <button class="btn" onclick="openLink('https://example.com/action-complete')">Refund Saved – Action Complete</button>
-
-  </div>
+        <button class="btn" onclick="openModal('refund')">Refund Requested</button>
+    </div>
 
 </div>
 
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
 <script>
-  function openLink(url) {
-    window.open(url, '_blank');
-  }
+const content = {
+
+hold: `
+<h2>Hold – Deposit Only</h2>
+<p><b>Responsible:</b> Sales</p>
+<p>Clients with partial payment. Onboarding is on hold.</p>
+<ul>
+<li>Full onboarding requires full payment</li>
+<li>Early onboarding needs approval</li>
+</ul>
+<p><b>Action:</b></p>
+<ul>
+<li>Follow up for balance</li>
+<li>Submit approval if needed</li>
+</ul>
+`,
+
+kickoff: `
+<h2>Kickoff Call</h2>
+<p><b>Responsible:</b> Sales</p>
+<p>Initial call to finalize deal and expectations.</p>
+<ul>
+<li>Confirm commitment</li>
+<li>Align expectations</li>
+</ul>
+<p><b>Action:</b></p>
+<ul>
+<li>Conduct call</li>
+<li>Transition to AM</li>
+</ul>
+`,
+
+booked: `
+<h2>Booked for Onboarding</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Client signed and scheduled.</p>
+<ul>
+<li>Auto intro email triggered</li>
+<li>Sales → AM handoff</li>
+</ul>
+<p><b>Action:</b></p>
+<ul>
+<li>Prepare onboarding</li>
+<li>Confirm meeting</li>
+</ul>
+`,
+
+kyc: `
+<h2>Waiting for KYC/KYB Approval</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Verification in progress.</p>
+<ul>
+<li>Broker-dependent timeline</li>
+</ul>
+<p><b>Action:</b></p>
+<ul>
+<li>Assist submission</li>
+<li>Follow up</li>
+</ul>
+`,
+
+funding: `
+<h2>Waiting to Go Live (Funding Pending)</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Setup complete, awaiting funds.</p>
+<p><b>Action:</b></p>
+<ul>
+<li>Confirm instructions</li>
+<li>Track transfer</li>
+</ul>
+`,
+
+live: `
+<h2>Live & Connected</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Account is active and trading.</p>
+<p><b>Action:</b></p>
+<ul>
+<li>Monitor performance</li>
+<li>Provide updates</li>
+</ul>
+`,
+
+pause: `
+<h2>On Pause (Client Request)</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Activity paused by client.</p>
+<p><b>Action:</b></p>
+<ul>
+<li>Document reason</li>
+<li>Follow up</li>
+</ul>
+`,
+
+nonresponsive: `
+<h2>Non-Responsive</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>No response after multiple attempts.</p>
+<p><b>Action:</b></p>
+<ul>
+<li>Log attempts</li>
+<li>Send final notice</li>
+</ul>
+`,
+
+refund: `
+<h2>Refund Requested</h2>
+<p><b>Responsible:</b> Account Manager</p>
+<p>Client requested refund.</p>
+<p><b>Action:</b></p>
+<ul>
+<li>Move deal</li>
+<li>Submit request</li>
+<li>Send to Slack</li>
+<li>Update GHL</li>
+</ul>
+`
+
+};
+
+function openModal(key) {
+    document.getElementById("modal-body").innerHTML = content[key];
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
 </script>
 
 </body>
